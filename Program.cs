@@ -2,28 +2,29 @@
 {
 	static void Main()
 	{
-		int[] array = new int[100];
+		const int arraySize = 100;
+		int[] array = new int[arraySize];
+
+		System.Numerics.BigInteger[] factorials = new System.Numerics.BigInteger[arraySize];
+
 		Random random = new();
 
 		for (int i = 0; i < array.Length; i++)
 		{
 			array[i] = random.Next(1, 101);
 		}
-
-		Task<System.Numerics.BigInteger>[] tasks = new Task<System.Numerics.BigInteger>[array.Length];
-
-		for (int i = 0; i < array.Length; i++)
+		// Можна було і await Task.WhenAll(...) але треба використовувати async Task...
+		Parallel.For(0, arraySize, i =>
 		{
-			int num = array[i];
-			tasks[i] = Task.Run(() => Factorial(num));
+			factorials[i] = Factorial(array[i]);
+		});
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			Console.WriteLine($"Факторіал числа: {array[i]}! = {factorials[i]}");
 		}
 
-		Task.WaitAll(tasks);
-
-		for (int i = 0; i < tasks.Length; i++)
-		{
-			Console.WriteLine($"Факторіал числа: {array[i]}! = {tasks[i].Result}");
-		}
+		Console.WriteLine("Розрахунок закінчено.");
 	}
 
 	static System.Numerics.BigInteger Factorial(int n)
