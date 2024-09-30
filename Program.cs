@@ -10,20 +10,20 @@
 			array[i] = random.Next(1, 101);
 		}
 
-		Task[] tasks = new Task[array.Length];
+		Task<System.Numerics.BigInteger>[] tasks = new Task<System.Numerics.BigInteger>[array.Length];
 
 		for (int i = 0; i < array.Length; i++)
 		{
 			int num = array[i];
-			tasks[i] = Task.Run(() =>
-			{
-				System.Numerics.BigInteger numF = Factorial(num);
-
-				Console.WriteLine($"Факторіал числа: {num}! = {numF}");
-			});
+			tasks[i] = Task.Run(() => Factorial(num));
 		}
 
 		Task.WaitAll(tasks);
+
+		for (int i = 0; i < tasks.Length; i++)
+		{
+			Console.WriteLine($"Факторіал числа: {array[i]}! = {tasks[i].Result}");
+		}
 	}
 
 	static System.Numerics.BigInteger Factorial(int n)
