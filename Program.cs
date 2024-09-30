@@ -15,22 +15,18 @@ class Program
 			array[i] = random.Next(1, 101);
 		}
 
-		Thread[] threads = new Thread[arraySize];
+		Task[] tasks = new Task[arraySize];
 
 		for (int i = 0; i < arraySize; i++)
 		{
 			int index = i;
-			threads[i] = new Thread(() =>
+			tasks[i] = Task.Run(() =>
 			{
 				factorials[index] = Factorial(array[index]);
 			});
-			threads[i].Start();
 		}
 
-		for (int i = 0; i < arraySize; i++)
-		{
-			threads[i].Join();
-		}
+		Task.WaitAll(tasks);
 
 		Console.WriteLine("Розрахунок закінчено.");
 
