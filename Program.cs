@@ -1,4 +1,4 @@
-﻿class Program
+class Program
 {
 	static void Main()
 	{
@@ -19,12 +19,12 @@
 			factorials[i] = Factorial(array[i]);
 		});
 
+		Console.WriteLine("Розрахунок закінчено.");
+
 		for (int i = 0; i < arraySize; i++)
 		{
 			Console.WriteLine($"Факторіал числа: {array[i]}! = {factorials[i]}");
 		}
-
-		Console.WriteLine("Розрахунок закінчено.");
 	}
 
 	static System.Numerics.BigInteger Factorial(int n)
