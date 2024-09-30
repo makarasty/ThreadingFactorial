@@ -1,11 +1,12 @@
+using System.Numerics;
+
 class Program
 {
 	static void Main()
 	{
 		const int arraySize = 100;
 		int[] array = new int[arraySize];
-
-		System.Numerics.BigInteger[] factorials = new System.Numerics.BigInteger[arraySize];
+		BigInteger[] factorials = new BigInteger[arraySize];
 
 		Random random = new();
 
@@ -13,11 +14,23 @@ class Program
 		{
 			array[i] = random.Next(1, 101);
 		}
-		// Можна було і await Task.WhenAll(...) але треба використовувати async Task...
-		Parallel.For(0, arraySize, i =>
+
+		Thread[] threads = new Thread[arraySize];
+
+		for (int i = 0; i < arraySize; i++)
 		{
-			factorials[i] = Factorial(array[i]);
-		});
+			int index = i;
+			threads[i] = new Thread(() =>
+			{
+				factorials[index] = Factorial(array[index]);
+			});
+			threads[i].Start();
+		}
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			threads[i].Join();
+		}
 
 		Console.WriteLine("Розрахунок закінчено.");
 
@@ -27,7 +40,7 @@ class Program
 		}
 	}
 
-	static System.Numerics.BigInteger Factorial(int n)
+	static BigInteger Factorial(int n)
 	{
 		if (n == 0)
 		{
